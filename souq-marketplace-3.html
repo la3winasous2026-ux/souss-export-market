@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Souss Export Market</title>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14181f; --bg:#f4f6fa; --surface:#ffffff; --line:#d9deea;
+  --indigo:#1b2a5c; --indigo-ink:#ffffff; --saffron:#e8a317; --argan:#3f6b4f; --muted:#5a6479;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --ink:#eef1f8; --bg:#0f1424; --surface:#171d33; --line:#2a3354;
+    --indigo:#9db0f5; --indigo-ink:#0f1424; --saffron:#f0b43a; --argan:#7fb892; --muted:#9aa4c0; }
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Readex Pro',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
+.brand{font-weight:700;font-size:1.05rem;color:var(--indigo)}
+.lang{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 14px;border-radius:999px;font:inherit;cursor:pointer}
+.banner{background:var(--saffron);color:#14181f;font-size:.82rem;text-align:center;padding:6px 12px}
+.hero{background:var(--indigo);color:var(--indigo-ink);border-radius:22px;padding:34px 24px;margin:8px 0 30px}
+.hero h1{margin:0 0 8px;font-size:clamp(1.6rem,5vw,2.4rem);line-height:1.3;font-weight:700}
+.hero p{margin:0 0 20px;opacity:.85;max-width:56ch}
+.ask{display:flex;gap:8px;flex-wrap:wrap}
+.ask input{flex:1;min-width:200px;padding:14px 16px;border-radius:14px;border:2px solid transparent;font:inherit;background:#fff;color:#14181f}
+.ask input:focus-visible,button:focus-visible,select:focus-visible,textarea:focus-visible,.f input:focus-visible{outline:3px solid var(--saffron);outline-offset:2px}
+.btn{background:var(--saffron);color:#14181f;border:0;border-radius:14px;padding:14px 22px;font:inherit;font-weight:600;cursor:pointer}
+.btn.alt{background:var(--indigo);color:var(--indigo-ink)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{border:1px solid rgba(255,255,255,.4);background:transparent;color:inherit;padding:5px 12px;border-radius:999px;font:inherit;font-size:.85rem;cursor:pointer}
+#match{margin-top:18px;display:none;background:var(--surface);color:var(--ink);border-radius:16px;padding:16px}
+#match h3{margin:0 0 8px;font-size:1rem}
+.m-item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.why{font-size:.82rem;color:var(--muted)}
+h2{font-size:1.35rem;margin:34px 0 12px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.filters button{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 14px;border-radius:999px;font:inherit;cursor:pointer}
+.filters button[aria-pressed=true]{background:var(--argan);color:#fff;border-color:var(--argan)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.card h3{margin:0;font-size:1.05rem}
+.meta{font-size:.84rem;color:var(--muted)}
+.tag{display:inline-block;background:color-mix(in srgb,var(--argan) 18%,transparent);color:var(--argan);border-radius:6px;padding:1px 8px;font-size:.78rem;width:fit-content}
+.card .btn{margin-top:auto;padding:10px 16px;font-size:.92rem}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;counter-reset:s}
+.step{border-inline-start:4px solid var(--saffron);padding:4px 14px}
+.step b{display:block}
+dialog{border:0;border-radius:18px;padding:22px;width:min(460px,92vw);background:var(--surface);color:var(--ink)}
+dialog::backdrop{background:rgba(10,14,28,.6)}
+.f{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;font-size:.9rem}
+.f input,.f textarea{padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--bg);color:var(--ink)}
+.row{display:flex;gap:8px;justify-content:flex-end}
+#ok{display:none;text-align:center;padding:10px 0}
+footer{margin:40px 0 24px;color:var(--muted);font-size:.84rem}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--saffron)}}
+</style>
+</head>
+<body>
+<div class="banner" id="banner"></div>
+<div class="wrap">
+  <header>
+    <div class="brand" id="brand"></div>
+    <button class="lang" id="langBtn" type="button"></button>
+  </header>
+
+  <section class="hero">
+    <h1 id="h1"></h1>
+    <p id="sub"></p>
+    <div class="ask">
+      <input id="q" type="text" aria-label="request">
+      <button class="btn" id="go" type="button"></button>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div id="match" aria-live="polite"></div>
+  </section>
+
+  <h2 id="hCat"></h2>
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+
+  <h2 id="hHow"></h2>
+  <div class="steps" id="steps"></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<dialog id="dlg">
+  <div id="formBox">
+    <h3 id="dTitle" style="margin-top:0"></h3>
+    <div class="meta" id="dProd" style="margin-bottom:12px"></div>
+    <div class="f"><label for="fName" id="lName"></label><input id="fName"></div>
+    <div class="f"><label for="fMail" id="lMail"></label><input id="fMail" type="email"></div>
+    <div class="f"><label for="fQty" id="lQty"></label><input id="fQty"></div>
+    <div class="f"><label for="fMsg" id="lMsg"></label><textarea id="fMsg" rows="3"></textarea></div>
+    <div class="row">
+      <button class="btn alt" type="button" id="cancel"></button>
+      <button class="btn" type="button" id="send"></button>
+    </div>
+  </div>
+  <div id="ok"></div>
+</dialog>
+
+<script>
+const T={
+ar:{brand:"سوق سوس للتصدير",banner:"نموذج تجريبي: الشركات والمنتجات أدناه أمثلة وهمية",
+h1:"صف ما تحتاجه، ونوصلك بالشركة المناسبة",sub:"اكتب طلبك بأي لغة. يقترح النظام الشركات الأقرب لحاجتك، وتتم الصفقة مباشرة بينك وبين الشركة.",
+ph:"مثال: 5 أطنان تمور للخليج",sending:"جارٍ الإرسال...",fail:"تعذر إرسال الطلب. تحقق من الاتصال وحاول مرة أخرى.",go:"ابحث عن شركة",hCat:"المنتجات",all:"الكل",
+hHow:"كيف يعمل السوق",foot:"الوساطة بالعمولة فقط. لا يُحتفظ بأموال ولا بضائع؛ الدفع والشحن بين الشركة والمشتري.",
+steps:[["صف طلبك","اكتب الكمية والسوق والمواصفات."],["نقترح الشركات","نطابق طلبك مع المنتجات والشهادات."],["اطلب عرض سعر","تصلك الشركة بعرضها، وتتفقان مباشرة."]],
+moq:"أقل طلب",quote:"اطلب عرض سعر",none:"لم نجد تطابقًا مباشرًا. جرّب كلمات مثل: تمور، زعفران، أركان، زيتون.",
+res:"أفضل المطابقات",why:"سبب الاقتراح:",dTitle:"طلب عرض سعر",lName:"الاسم",lMail:"البريد الإلكتروني",lQty:"الكمية المطلوبة",lMsg:"تفاصيل إضافية",
+cancel:"إلغاء",send:"أرسل الطلب",ok:"تم تجهيز طلبك. (في النسخة الحقيقية يصل إلى البريد ولوحة الوساطة.)",need:"أدخل الاسم والبريد",
+chips:["تمور للخليج","زعفران فاخر","زيت أركان للتجميل","زيتون عضوي لأوروبا"]},
+en:{brand:"Souss Export Market",banner:"Prototype: companies and products below are fictional samples",
+h1:"Describe what you need. We connect you with the right company.",sub:"Write your request in any language. The system suggests the closest companies, and you close the deal directly with them.",
+ph:"e.g. 5 tons of dates for the Gulf",sending:"Sending...",fail:"Could not send the request. Check your connection and try again.",go:"Find a company",hCat:"Products",all:"All",
+hHow:"How the market works",foot:"Commission-only brokerage. No money or goods are held; payment and shipping are between company and buyer.",
+steps:[["Describe your request","Add quantity, market and specs."],["We suggest companies","Your request is matched to products and certificates."],["Request a quote","The company replies with an offer and you agree directly."]],
+moq:"Min. order",quote:"Request a quote",none:"No direct match. Try words like: dates, saffron, argan, olive.",
+res:"Best matches",why:"Why:",dTitle:"Request a quote",lName:"Name",lMail:"Email",lQty:"Quantity needed",lMsg:"Extra details",
+cancel:"Cancel",send:"Send request",ok:"Your request is ready. (In the live version it reaches email and the brokerage dashboard.)",need:"Enter name and email",
+chips:["Dates for the Gulf","Premium saffron","Argan oil for cosmetics","Organic olives for Europe"]}
+};
+const CATS={dates:["تمور","Dates"],oil:["زيوت","Oils"],spice:["توابل","Spices"],craft:["حِرف","Crafts"]};
+const P=[
+{id:1,cat:"dates",n:["تمر مجهول فاخر","Premium Medjool dates"],co:["تعاونية واحة تجريبية","Sample Oasis Coop"],reg:["درعة","Drâa"],moq:["طن واحد","1 ton"],cert:"ONSSA, GlobalG.A.P",k:"تمر تمور مجهول dates medjool date نخيل"},
+{id:2,cat:"dates",n:["تمر بوفقوس","Boufegous dates"],co:["شركة نخيل الجنوب (نموذج)","South Palms Co. (sample)"],reg:["زاكورة","Zagora"],moq:["500 كغ","500 kg"],cert:"ONSSA",k:"تمر تمور بوفقوس dates date خليج gulf"},
+{id:3,cat:"spice",n:["زعفران تاليوين","Taliouine saffron"],co:["زعفران الأطلس (نموذج)","Atlas Saffron (sample)"],reg:["تارودانت","Taroudant"],moq:["1 كغ","1 kg"],cert:"AOP / PGI",k:"زعفران saffron توابل spice فاخر premium"},
+{id:4,cat:"oil",n:["زيت أركان تجميلي","Cosmetic argan oil"],co:["أركان سوس (نموذج)","Souss Argan (sample)"],reg:["تزنيت","Tiznit"],moq:["200 لتر","200 L"],cert:"ECOCERT, ISO 22716",k:"أركان اركان argan oil زيت تجميل cosmetic cosmetics"},
+{id:5,cat:"oil",n:["زيت أركان غذائي","Culinary argan oil"],co:["تعاونية نساء سوس (نموذج)","Souss Women's Coop (sample)"],reg:["اشتوكة","Chtouka"],moq:["100 لتر","100 L"],cert:"IGP, Organic",k:"أركان اركان argan زيت oil غذائي culinary food"},
+{id:6,cat:"oil",n:["زيت زيتون بكر ممتاز","Extra virgin olive oil"],co:["معصرة الأطلس (نموذج)","Atlas Press (sample)"],reg:["أزيلال","Azilal"],moq:["1000 لتر","1,000 L"],cert:"ONSSA, ISO 22000",k:"زيتون زيت olive oil عضوي organic أوروبا europe"},
+{id:7,cat:"dates",n:["زيتون أخضر عضوي","Organic green olives"],co:["بساتين الغرب (نموذج)","Gharb Orchards (sample)"],reg:["سلا","Sale"],moq:["طن واحد","1 ton"],cert:"Organic EU",k:"زيتون olive olives عضوي organic أوروبا europe"},
+{id:8,cat:"craft",n:["زرابي أمازيغية يدوية","Handmade Amazigh rugs"],co:["حرفيو الأطلس (نموذج)","Atlas Artisans (sample)"],reg:["خنيفرة","Khenifra"],moq:["20 قطعة","20 pcs"],cert:"Artisan label",k:"زربية زرابي سجاد rug rugs carpet handmade حرف craft"}
+];
+P[6].cat="oil";
+let L="ar",F="all",cur=null;
+const $=id=>document.getElementById(id);
+function norm(s){return s.toLowerCase().replace(/[\u064b-\u065f]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه")}
+function render(){
+  const t=T[L],i=L==="ar"?0:1;
+  document.documentElement.lang=L;document.documentElement.dir=L==="ar"?"rtl":"ltr";
+  $("banner").textContent=t.banner;$("brand").textContent=t.brand;$("langBtn").textContent=L==="ar"?"English":"العربية";
+  $("h1").textContent=t.h1;$("sub").textContent=t.sub;$("q").placeholder=t.ph;$("go").textContent=t.go;
+  $("hCat").textContent=t.hCat;$("hHow").textContent=t.hHow;$("foot").textContent=t.foot;
+  $("chips").innerHTML="";t.chips.forEach(c=>{const b=document.createElement("button");b.className="chip";b.type="button";b.textContent=c;b.onclick=()=>{$("q").value=c;search()};$("chips").appendChild(b)});
+  $("filters").innerHTML="";
+  [["all",t.all],...Object.entries(CATS).map(([k,v])=>[k,v[i]])].forEach(([k,label])=>{
+    const b=document.createElement("button");b.type="button";b.textContent=label;b.setAttribute("aria-pressed",F===k);b.onclick=()=>{F=k;render()};$("filters").appendChild(b)});
+  $("grid").innerHTML="";
+  P.filter(p=>F==="all"||p.cat===F).forEach(p=>{
+    const d=document.createElement("div");d.className="card";
+    d.innerHTML=`<span class="tag">${CATS[p.cat][i]}</span><h3>${p.n[i]}</h3><div class="meta">${p.co[i]} · ${p.reg[i]}</div><div class="meta">${t.moq}: ${p.moq[i]}</div><div class="meta">${p.cert}</div>`;
+    const b=document.createElement("button");b.className="btn";b.type="button";b.textContent=t.quote;b.onclick=()=>openQ(p);d.appendChild(b);$("grid").appendChild(d)});
+  $("steps").innerHTML=t.steps.map(s=>`<div class="step"><b>${s[0]}</b><span class="meta">${s[1]}</span></div>`).join("");
+  ["dTitle","lName","lMail","lQty","lMsg"].forEach(k=>$(k).textContent=t[k]);
+  $("cancel").textContent=t.cancel;$("send").textContent=t.send;
+  if($("match").style.display==="block")search();
+}
+function search(){
+  const t=T[L],i=L==="ar"?0:1,q=norm($("q").value.trim()),box=$("match");
+  box.style.display="block";
+  const words=q.split(/[\s,.،؟?]+/).filter(w=>w.length>1);
+  const scored=P.map(p=>{
+    const hay=norm(p.k+" "+p.n.join(" ")+" "+CATS[p.cat].join(" "));
+    const hits=words.filter(w=>hay.includes(w.replace(/^ال/,"")));
+    return{p,hits,s:hits.length}}).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,3);
+  if(!q||!scored.length){box.innerHTML=`<div class="why">${t.none}</div>`;return}
+  box.innerHTML=`<h3>${t.res}</h3>`;
+  scored.forEach(({p,hits})=>{
+    const r=document.createElement("div");r.className="m-item";
+    r.innerHTML=`<div><b>${p.n[i]}</b><div class="meta">${p.co[i]}</div><div class="why">${t.why} ${hits.join("، ")}</div></div>`;
+    const b=document.createElement("button");b.className="btn";b.type="button";b.textContent=t.quote;b.onclick=()=>openQ(p);r.appendChild(b);box.appendChild(r)});
+}
+function openQ(p){
+  cur=p;const i=L==="ar"?0:1;
+  $("dProd").textContent=p.n[i]+" · "+p.co[i];
+  $("formBox").style.display="block";$("ok").style.display="none";
+  ["fName","fMail","fQty","fMsg"].forEach(k=>$(k).value="");
+  $("dlg").showModal();
+}
+const KEY="cc863ac8-23eb-4fc7-91e5-e597e2dae612";
+$("send").onclick=async()=>{
+  const t=T[L],i=L==="ar"?0:1,btn=$("send");
+  if(!$("fName").value.trim()||!$("fMail").value.trim()){alert(t.need);return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("fMail").value.trim())){alert(L==="ar"?"أدخل بريدًا إلكترونيًا صحيحًا، مثل name@example.com":"Enter a valid email address, like name@example.com");$("fMail").focus();return}
+  btn.disabled=true;const old=btn.textContent;btn.textContent=t.sending;
+  try{
+    const res=await fetch("https://api.web3forms.com/submit",{
+      method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+      body:JSON.stringify({
+        access_key:KEY,
+        subject:"Quote request: "+cur.n[1],
+        from_name:"Souss Export Market",
+        name:$("fName").value.trim(),
+        email:$("fMail").value.trim(),
+        product:cur.n[1]+" / "+cur.n[0],
+        company:cur.co[1],
+        quantity:$("fQty").value.trim(),
+        message:$("fMsg").value.trim(),
+        language:L
+      })});
+    const data=await res.json();
+    if(!data.success)throw new Error(data.message||"fail");
+    $("formBox").style.display="none";$("ok").style.display="block";
+    $("ok").textContent=L==="ar"?"تم إرسال طلبك. ستصلك إجابة عبر البريد الإلكتروني قريبًا.":"Your request was sent. You will get a reply by email soon.";
+    setTimeout(()=>$("dlg").close(),3000);
+  }catch(e){alert(t.fail)}
+  finally{btn.disabled=false;btn.textContent=old}
+};
+$("cancel").onclick=()=>$("dlg").close();
+$("go").onclick=search;
+$("q").addEventListener("keydown",e=>{if(e.key==="Enter")search()});
+$("langBtn").onclick=()=>{L=L==="ar"?"en":"ar";render()};
+render();
+</script>
+</body>
+</html>
